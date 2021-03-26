@@ -4,7 +4,7 @@
   "description": "[![Actions Status](https://github.com/Tatyana100500/backend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/Tatyana100500/backend-project-lvl3/actions)",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
   "repository": {
     "type": "git",

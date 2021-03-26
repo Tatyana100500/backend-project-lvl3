@@ -3,8 +3,19 @@
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/Tatyana100500/backend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/Tatyana100500/backend-project-lvl3/actions)",
   "main": "index.js",
+  "bin": {
+    "page-loader": "bin/pageLoader.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+  },
+  "type": "module",
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
   },
   "repository": {
     "type": "git",

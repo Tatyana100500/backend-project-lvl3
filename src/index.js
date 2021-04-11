@@ -146,7 +146,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
               //.then(() => resolve(responses))
               //.catch((error) => {
                 //log('!!!!!!!!!!!!!!!!!!', error);
-                throw new Error(error);
+                throw new Error();
               //});
           });
       }))

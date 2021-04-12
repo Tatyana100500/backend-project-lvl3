@@ -141,13 +141,13 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       .then((responses) => new Promise((resolve) => {
         fs.access(loadedResourcesPath)
           .then(() => resolve(responses))
-          .catch(() => {
+          //.catch(() => {
             //fs.mkdir(loadedResourcesPath)
             //  .then(() => resolve(responses))
             //  .catch((error) => {
-                throw new Error();
+                //throw new Error();
             //  });
-          });
+          //});
       }))
       .then((responses) => {
         const promises = responses.map((response) => {

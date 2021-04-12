@@ -145,7 +145,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
             fs.mkdir(loadedResourcesPath)
               .then(() => resolve(responses))
               .catch((error) => {
-                throw new Error();
+                throw new Error(error);
               });
           });
       }))

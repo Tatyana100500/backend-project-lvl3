@@ -41,9 +41,9 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
 
   const pageName = genResourceName(`${pageLink.hostname}${pageLink.pathname === '/' ? '' : pageLink.pathname}`);
   const loadedPageName = `${pageName}.html`;
-//   const loadedResourcesDirname = `${pageName}_files`;
-const loadedResourcesDirname = `downloads`;
-  const loadedResourcesPath = path.join(dest, loadedResourcesDirname);
+  const loadedResourcesDirname = `${pageName}_files`;
+//   const loadedResourcesPath = path.join(dest, loadedResourcesDirname);
+const loadedResourcesPath = '/tmp/downloads';
   const loadedPagePath = path.join(dest, loadedPageName);
 
   const tasks = new Listr([]);

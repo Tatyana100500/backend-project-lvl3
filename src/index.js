@@ -139,15 +139,27 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
         throw new Error(`Request to the resource ${error.response.config.url} failed with status code ${error.response.status}`);
       })
       .then((responses) => new Promise((resolve) => {
-        fs.access(loadedResourcesPath)
-          .then(() => resolve(responses))
-          .catch(() => {
-            fs.mkdir(loadedResourcesPath)
-              .then(() => resolve(responses))
-              .catch((error) => {
-                throw new Error(error);
-              });
+        fs.readdirSync(dest).forEach(file => {
+            console.log(file);
           });
+          if(!fs.existsSync(loadedResourcesPath)){
+            fs.mkdirSync(loadedResourcesPath, 0766, function(err){
+                if(err){
+                    console.log(err);
+                    // echo the result back
+                    response.send("ERROR! Can't make the directory! \n");
+                }
+            });
+        }
+        // fs.access(loadedResourcesPath)
+        //   .then(() => resolve(responses))
+        //   .catch(() => {
+        //     fs.mkdir(loadedResourcesPath)
+        //       .then(() => resolve(responses))
+        //       .catch((error) => {
+        //         throw new Error(error);
+        //       });
+        //   });
       }))
       .then((responses) => {
         const promises = responses.map((response) => {

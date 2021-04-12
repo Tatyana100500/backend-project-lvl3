@@ -142,11 +142,11 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
         fs.access(loadedResourcesPath)
           .then(() => resolve(responses))
           .catch(() => {
-            fs.mkdir(loadedResourcesPath)
-              .then(() => resolve(responses))
-              .catch((error) => {
-                throw new Error(error);
-              });
+            //fs.mkdir(loadedResourcesPath)
+            //  .then(() => resolve(responses))
+            //  .catch((error) => {
+                throw new Error();
+            //  });
           });
       }))
       .then((responses) => {

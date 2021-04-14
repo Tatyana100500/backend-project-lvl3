@@ -43,7 +43,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
   const loadedPageName = `${pageName}.html`;
   const loadedResourcesDirname = `${pageName}_files`;
   const loadedResourcesPath = path.join(dest, loadedResourcesDirname);
-  const loadedPagePath = path.join(loadedResourcesPath, loadedPageName);
+  const loadedPagePath = path.join(dest, loadedPageName);
 
   const tasks = new Listr([]);
 

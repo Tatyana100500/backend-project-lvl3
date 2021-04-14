@@ -32,8 +32,8 @@ const getTagSourcePropertyName = (tag) => {
 const isCanonicalLink = ($element) => $element[0].name === 'link' && $element.attr('rel') === 'canonical';
 
 const isAlternateLink = ($element) => $element[0].name === 'link' && $element.attr('rel') === 'alternate';
-
-const loadPage = (url, dest = process.cwd(), config = {}) => {
+const dest = process.cwd();
+const loadPage = (url, dest, config = {}) => {
   const { isSpinnerVisible = false } = config;
 
   const pageLink = new URL(url);

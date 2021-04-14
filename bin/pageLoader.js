@@ -13,7 +13,7 @@ program
   .action((pageUrl, options) => loadPage(pageUrl, options.output, { isSpinnerVisible: true })
     .then((filepath) => console.log(filepath))
     .catch((error) => {
-      console.error('!!!!!!!!!!!!!!!', error);
+      console.error(error);
 
       process.exitCode = 1;
     }));

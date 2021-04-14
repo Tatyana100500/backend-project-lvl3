@@ -216,8 +216,8 @@ const loadPage = (url, dest, config = {}) => {
       .writeFile(loadedPagePath, prettier.format(data, { parser: 'html' }), 'utf-8')
       .catch(() => {
         throw new Error('Error during saving the loaded page');
-      }))
-    .then(() => loadedPagePath);
+      }));
+    //.then(() => loadedPagePath);
 
   return promise;
 };

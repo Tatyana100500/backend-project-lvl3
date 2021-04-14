@@ -213,11 +213,11 @@ const loadPage = (url, dest, config = {}) => {
       return data;
     })
     .then(({ data }) => fs
-      .writeFile(loadedPagePath, prettier.format(data, { parser: 'html' }), 'utf-8')
+      .writeFile(loadedPagePath, prettier.format(data.trim(), { parser: 'html' }), 'utf-8')
       .catch(() => {
         throw new Error('Error during saving the loaded page');
-      }));
-    //.then(() => loadedPagePath);
+      }))
+    .then(() => loadedPagePath);
 
   return promise;
 };

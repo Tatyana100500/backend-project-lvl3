@@ -138,14 +138,14 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       .catch((error) => {
         throw new Error(`Request to the resource ${error.response.config.url} failed with status code ${error.response.status}`);
       })
-      .then((responses) => new Promise((resolve) => {
+      .then((responses) => new Promise((resolve, reject) => {
          fs.access(loadedResourcesPath)
            .then(() => resolve(responses))
            .catch(() => {
             fs.mkdir(loadedResourcesPath, { recursive: true })
               .then(() => resolve(responses))
               .catch((error) => {
-                throw new Error(error);
+                reject(error);
               });
            });
       }))

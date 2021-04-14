@@ -142,7 +142,7 @@ const loadPage = (url, dest, config = {}) => {
          fs.access(loadedResourcesPath)
            .then(() => resolve(responses))
            .catch(() => {
-            fs.mkdir(loadedResourcesPath, { recursive: true })
+            fs.mkdir(loadedResourcesPath)
               .then(() => resolve(responses))
               .catch((error) => {
                 reject(error);

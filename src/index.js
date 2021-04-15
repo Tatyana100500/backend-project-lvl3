@@ -224,7 +224,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       .catch(() => {
         throw new Error('Error during saving the loaded page');
       }))
-    .then(() => path.join(loadedResourcesPath, loadedPageName));
+    .then(() => loadedPagePath);
 
   return promise;
 };

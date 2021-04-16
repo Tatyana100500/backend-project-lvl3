@@ -132,7 +132,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       })
       .filter((request) => !!request);
 
-    const htmlString = $.html();
+    const htmlString = $.html().trim();
 
     return Promise.all(requests)
       .catch((error) => {
@@ -163,7 +163,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
 
         return Promise.all(promises);
       })
-      .then(() => ({ data: htmlString.trim() }));
+      .then(() => ({ data: htmlString }));
   };
 
   log(`Fetching page: ${url}`);
@@ -220,7 +220,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       return {data};
     })
       .then(( {data} ) => fs
-      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data, { parser: 'html' }), 'utf-8')
+      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data.trim(), { parser: 'html' }), 'utf-8')
       .catch(() => {
         throw new Error('Error during saving the loaded page');
       }))

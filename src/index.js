@@ -220,7 +220,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       return {data};
     })
       .then(( {data} ) => fs
-      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data, { parser: 'html' }).trim(), 'utf-8')
+      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data, { parser: 'html' }), 'utf-8')
       .catch(() => {
         throw new Error('Error during saving the loaded page');
       }))

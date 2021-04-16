@@ -213,15 +213,17 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       return data;
     })
     .then(({ data }) => {
-        const data1 = data;
+        //const data1 = data;
     fs.writeFile(loadedPagePath, prettier.format(data, { parser: 'html' }), 'utf-8')
     .catch(() => {
         throw new Error('Error during saving the loaded page');
       })
-      return {data1};
+
+      //log('Writing data to the file.', data1);
+      return {data};
     })
       .then(( {data} ) => fs
-      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data, { parser: 'html' }), 'utf-8')
+      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data), 'utf-8')
       .catch(() => {
         throw new Error('Error during saving the loaded page');
       }))

@@ -76,7 +76,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
   const processTag = ($element, propName) => {
     const resourceUrl = new URL($element.attr(propName), base);
     const resourcePath = path.parse(`${resourceUrl.hostname}${resourceUrl.pathname}`);
-    const resourceName = genResourceName(`/${resourcePath.name}`);
+    const resourceName = genResourceName(`${resourcePath.dir}/${resourcePath.name}`);
     const ext = resourcePath.ext || '.html';
     const resourceFilename = `${resourceName}${ext}`;
 
@@ -163,7 +163,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
 
         return Promise.all(promises);
       })
-      .then(() => ({ data: htmlString }));
+      .then(() => ({ data: htmlString.trim() }));
   };
 
   log(`Fetching page: ${url}`);

@@ -2,10 +2,12 @@ import os from 'os';
 import path from 'path';
 import { promises as fs } from 'fs';
 import nock from 'nock';
-import { beforeEach, expect, jest } from '@jest/globals';
+import pkg from '@jest/globals';
 import prettier from 'prettier';
 import cheerio from 'cheerio';
-import loadPage from '../src';
+import loadPage from '../src/index.js';
+
+const { beforeEach, expect, jest } = pkg;
 
 jest.setTimeout(30000);
 

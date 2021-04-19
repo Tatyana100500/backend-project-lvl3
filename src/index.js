@@ -124,12 +124,12 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
 
         return result;
       })
-      //.map(($element) => {
-       // const process = tags[$element[0].name];
-        //const request = process($element);
+      .map(($element) => {
+        //const process = tags[$element[0].name];
+        const request = $element;
 
-       // return request;
-      //})
+        return request;
+      })
       .filter((request) => !!request);
 
     const htmlString = $.html();

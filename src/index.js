@@ -120,9 +120,9 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       .filter(($element) => {
         const propertyName = getTagSourcePropertyName($element[0].name);
         const resourceUrl = $element.attr(propertyName);
-        const result = isLocalResource(resourceUrl);
+        //const result = isLocalResource(resourceUrl);
 
-        return result;
+        return resourceUrl;
       })
       .map(($element) => {
         const process = tags[$element[0].name];

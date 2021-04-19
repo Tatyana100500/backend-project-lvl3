@@ -93,14 +93,15 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       return fetchResource(resourceUrl, resourceFilename);
     },
     link: ($element) => {
-      const propName = getTagSourcePropertyName('link');
-      const { resourceUrl, resourceFilename } = processTag($element, propName);
+      //const propName = getTagSourcePropertyName('link');
+      //const { resourceUrl, resourceFilename } = processTag($element, propName);
 
       if (isCanonicalLink($element)) return null;
 
       if (isAlternateLink($element)) return null;
 
-      return fetchResource(resourceUrl, resourceFilename);
+      //return fetchResource(resourceUrl, resourceFilename);
+      return $element;
     },
     script: ($element) => {
       const propName = getTagSourcePropertyName('script');
@@ -126,7 +127,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       })
       .map(($element) => {
         const process = tags[$element[0].name];
-        const request = $element;
+        const request = process($element);
 
         return request;
       })

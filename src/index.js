@@ -125,7 +125,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
         return result;
       })
       .map(($element) => {
-        //const process = tags[$element[0].name];
+        const process = tags[$element[0].name];
         const request = $element;
 
         return request;

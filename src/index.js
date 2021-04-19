@@ -122,7 +122,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
         const resourceUrl = $element.attr(propertyName);
         const result = isLocalResource(resourceUrl);
 
-        return resourceUrl;
+        return result;
       })
       .map(($element) => {
         const process = tags[$element[0].name];

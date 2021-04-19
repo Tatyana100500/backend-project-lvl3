@@ -1,235 +1,171 @@
+import 'source-map-support/register';
+import axios from 'axios';
 import path from 'path';
 import { promises as fs } from 'fs';
-import axios from 'axios';
+import url from 'url';
 import cheerio from 'cheerio';
-import prettier from 'prettier';
-import Listr from 'listr';
 import debug from 'debug';
-import 'axios-debug-log';
-
-const axiosInstance = axios.create({
-  timeout: 3000,
-});
+import _ from 'lodash/fp';
+import Listr from 'listr';
 
 const log = debug('page-loader');
+const logAxios = debug('page-loader: axios');
+const logAssets = debug('page-loader: assets');
 
-const genResourceName = (url) => url.replace(/[^a-zA-Z0-9]/g, '-');
-
-const sources = {
-  img: 'src',
+const assetsAttrs = {
   link: 'href',
   script: 'src',
+  img: 'src',
 };
 
-const getTagSourcePropertyName = (tag) => {
-  const propertyName = sources[tag];
-
-  if (!propertyName) throw new Error('Invalid tag.');
-
-  return propertyName;
+const isLinkLocal = (link) => {
+  const { hostname } = url.parse(link);
+  return hostname === null;
 };
 
-const isCanonicalLink = ($element) => $element[0].name === 'link' && $element.attr('rel') === 'canonical';
+const getFileName = (source) => {
+  const { pathname } = url.parse(source);
+  const extention = pathname.match(/\.\w+$/) === null ? '' : pathname.match(/\.\w+$/)[0];
 
-const isAlternateLink = ($element) => $element[0].name === 'link' && $element.attr('rel') === 'alternate';
+  return pathname
+    .replace(/^\//, '')
+    .replace(extention, '')
+    .replace(/[\W_]+/g, '-')
+    .concat(extention);
+};
 
-const loadPage = (url, dest = process.cwd(), config = {}) => {
-  const { isSpinnerVisible = false } = config;
+const getLocalAssetsList = (html) => {
+  logAssets('getting assets list');
 
-  const pageLink = new URL(url);
-  const base = `${pageLink.protocol}//${pageLink.hostname}`;
+  const requiredAssets = ['link', 'script', 'img'];
+  const $ = cheerio.load(html);
 
-  const pageName = genResourceName(`${pageLink.hostname}${pageLink.pathname === '/' ? '' : pageLink.pathname}`);
-  const loadedPageName = `${pageName}.html`;
-  const loadedResourcesDirname = `${pageName}_files`;
-  const loadedResourcesPath = path.join(dest, loadedResourcesDirname);
-  const loadedPagePath = path.join(dest, loadedPageName);
+  const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
+    .map((index, element) => $(element).attr(assetsAttrs[asset]))
+    .get()));
 
-  const tasks = new Listr([]);
+  logAssets('found assets: %O', allAssets);
 
-  const resourcesTasks = new Listr([], { concurrent: true });
+  const localAssets = allAssets
+    .filter(item => isLinkLocal(item));
 
-  const fetchResource = (resourceUrl, resourceFilename) => {
-    const request = new Promise((resolve, reject) => axiosInstance
-      .get(resourceUrl.toString(), { responseType: 'arraybuffer' })
-      .then((response) => resolve({ ...response, filename: resourceFilename }))
-      .catch((error) => reject(error)));
+  logAssets('local assets: %O', localAssets);
 
-    const task = {
-      title: `Fetching ${resourceUrl} resource`,
-      task: () => request,
-    };
+  return localAssets;
+};
 
-    resourcesTasks.add(task);
+const loadAsset = (source, outputFilePath) => axios
+  .get(source, {
+    responseType: 'arraybuffer',
+  })
+  .then(({ data }) => {
+    logAssets('loading asset %s to %s', source, outputFilePath);
+    logAxios(data);
+    return fs.writeFile(outputFilePath, data);
+  });
 
-    return request;
-  };
+// write source data to file, rewrite file if already exists
 
-  const isLocalResource = (resourceUrl) => {
-    if (resourceUrl.startsWith('/')) return true;
+const loadPage = (source, outputDirectory) => {
+  const { hostname, pathname } = url.parse(source);
+  const preName = pathname === '/' ? hostname : `${hostname}-${pathname}`;
+  const outputHtmlName = preName
+    .replace(/^\//, '')
+    .replace(/[\W_]+/g, '-')
+    .concat('.html');
 
-    const source = new URL(resourceUrl);
+  const outputHtmlPath = path.join(outputDirectory, outputHtmlName);
 
-    return source.hostname === pageLink.hostname;
-  };
+  const assetsDirName = outputHtmlName.replace(/\.html$/, '_files');
+  const assetsDirPath = path.join(outputDirectory, assetsDirName);
 
-  const processTag = ($element, propName) => {
-    const resourceUrl = new URL($element.attr(propName), base);
-    const resourcePath = path.parse(`${resourceUrl.hostname}${resourceUrl.pathname}`);
-    const resourceName = genResourceName(`${resourcePath.dir}/${resourcePath.name}`);
-    const ext = resourcePath.ext || '.html';
-    const resourceFilename = `${resourceName}${ext}`;
+  log('new page loading');
+  log('source: %s', source);
+  log('html file name: %s', outputHtmlName);
 
-    $element.attr(propName, `${loadedResourcesDirname}/${resourceFilename}`);
-
-    return { resourceUrl, resourceFilename };
-  };
-
-  const tags = {
-    img: ($element) => {
-      const propName = getTagSourcePropertyName('img');
-      const { resourceUrl, resourceFilename } = processTag($element, propName);
-
-      return fetchResource(resourceUrl, resourceFilename);
+  // download source page
+  const loadPageTasks = new Listr([
+    {
+      title: 'Download source page',
+      task: ctx => axios
+        .get(source)
+        .then(({ status, data }) => {
+          log('loading page html');
+          logAxios('axios response: %s %s', status, data);
+          ctx.data = data;
+        }),
     },
-    link: ($element) => {
-      const propName = getTagSourcePropertyName('link');
-      const { resourceUrl, resourceFilename } = processTag($element, propName);
+    {
+      title: 'get assets list',
+      task: (ctx) => {
+        ctx.assetsLinks = getLocalAssetsList(ctx.data);
 
-      if (isCanonicalLink($element)) return null;
+        ctx.assetsUrls = ctx.assetsLinks
+          .map(assetLink => url.resolve(source, assetLink))
+          .map((assetUrl) => {
+            const outputFileName = getFileName(assetUrl);
+            const outputFilePath = path.join(assetsDirPath, outputFileName);
 
-      if (isAlternateLink($element)) return null;
+            return {
+              assetUrl,
+              outputFilePath,
+            };
+          });
 
-      return fetchResource(resourceUrl, resourceFilename);
+        logAssets('assets URLs for downloading: %O', ctx.assetsUrls);
+      },
     },
-    script: ($element) => {
-      const propName = getTagSourcePropertyName('script');
-      const { resourceUrl, resourceFilename } = processTag($element, propName);
+    {
+      title: 'localize html assets',
+      task: (ctx) => {
+        const newHtmlRegExp = ctx.assetsLinks
+          .map((oldValue) => {
+            const newValue = `${assetsDirName}/${getFileName(oldValue)}`;
+            return {
+              oldValue,
+              newValue,
+            };
+          });
 
-      return fetchResource(resourceUrl, resourceFilename);
+        ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
+          const { oldValue, newValue } = currentValue;
+          return acc.replace(oldValue, newValue);
+        }, ctx.data);
+      },
     },
-  };
+    {
+      title: 'create assets dir',
+      task: () => {
+        log('create assets dir: %s', assetsDirPath);
+        return fs.mkdir(assetsDirPath);
+      },
+    },
+    {
+      title: 'save html',
+      task: (ctx) => {
+        log('assets dir created successfully');
+        log('saving html file to %s', outputHtmlPath);
+        fs.writeFile(outputHtmlPath, ctx.newHtml);
+      },
+    },
+    {
+      title: 'save assets',
+      task: (ctx) => {
+        log('html saved successfully');
+        const assetsTasks = ctx.assetsUrls
+          .map(({ assetUrl, outputFilePath }) => ({
+            title: `Loading asset from ${assetUrl} to ${outputFilePath}`,
+            task: () => loadAsset(assetUrl, outputFilePath),
+          }));
 
-  const loadResources = ({ data }) => {
-    const $ = cheerio.load(data);
-
-    const elements = Array.from($('img, link, script[src]'));
-
-    const requests = elements
-      .map((element) => $(element))
-      .filter(($element) => {
-        const propertyName = getTagSourcePropertyName($element[0].name);
-        const resourceUrl = $element.attr(propertyName);
-        const result = isLocalResource(resourceUrl);
-
-        return result;
-      })
-      .map(($element) => {
-        const process = tags[$element[0].name];
-        const request = process($element);
-
-        return request;
-      })
-      .filter((request) => !!request);
-
-    const htmlString = $.html();
-
-    return Promise.all(requests)
-      .catch((error) => {
-        throw new Error(`Request to the resource ${error.response.config.url} failed with status code ${error.response.status}`);
-      })
-      .then((responses) => new Promise((resolve, reject) => {
-         fs.access(loadedResourcesPath)
-           .then(() => resolve(responses))
-           .catch(() => {
-            fs.mkdir(loadedResourcesPath)
-              .then(() => resolve(responses))
-              .catch((error) => {
-                reject(error);
-              });
-           });
-      }))
-      .then((responses) => {
-        const promises = responses.map((response) => {
-          const filepath = path.join(loadedResourcesPath, response.filename);
-          const buffer = response.data;
-
-          return fs
-            .writeFile(filepath, buffer)
-            .catch(() => {
-              throw new Error(`Error during saving the loaded resource ${response.filename}`);
-            });
+        logAssets('saving assets to disk');
+        return new Listr(assetsTasks, {
+          concurrent: true, exitOnError: false,
         });
-
-        return Promise.all(promises);
-      })
-      .then(() => ({ data: htmlString }));
-  };
-
-  log(`Fetching page: ${url}`);
-
-  const promise = fs
-    .access(dest)
-    .catch(() => {
-      throw new Error('Dest folder does not exist');
-    })
-    .then(() => {
-      const request = axiosInstance
-        .get(url)
-        .catch((error) => {
-          if (error.code === 'ECONNABORTED') {
-            throw new Error(`A timeout happened on url ${url}`);
-          }
-
-          throw new Error(`Request to the page ${url} failed with status code ${error.response.status}`);
-        });
-
-      const task = {
-        title: `Fetching page: ${url}`,
-        task: () => request,
-      };
-
-      const resourcesTask = {
-        title: 'Fetching resources',
-        task: () => resourcesTasks,
-      };
-
-      tasks.add(task);
-      tasks.add(resourcesTask);
-
-      if (isSpinnerVisible) tasks.run();
-
-      return request;
-    })
-    .then((response) => {
-      log('Fetching resources');
-
-      return response;
-    })
-    .then(loadResources)
-    .then((data) => {
-      log('Writing data to the file.');
-
-      return data;
-    })
-    .then(({ data }) => {
-        //const data1 = data;
-    fs.writeFile(loadedPagePath, prettier.format(data, { parser: 'html' }), 'utf-8')
-    .catch(() => {
-        throw new Error('Error during saving the loaded page');
-      })
-
-      //log('Writing data to the file.', data1);
-      return {data};
-    })
-      .then(( {data} ) => fs
-      .writeFile(path.join(loadedResourcesPath, loadedPageName), prettier.format(data, { parser: 'html' }), 'utf-8')
-      .catch(() => {
-        throw new Error('Error during saving the loaded page');
-      }))
-    .then(() => loadedPagePath);
-
-  return promise;
+      },
+    },
+  ]);
+  return loadPageTasks.run();
 };
 
 export default loadPage;

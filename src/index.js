@@ -132,7 +132,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
       })
       .filter((request) => !!request);
 
-    //const htmlString = $.html();
+    const htmlString = $.html();
 
     return Promise.all(requests)
       .catch((error) => {
@@ -163,7 +163,7 @@ const loadPage = (url, dest = process.cwd(), config = {}) => {
 
         return Promise.all(promises);
       })
-      .then(() => ({ data }));
+      .then(() => ({ data: htmlString }));
   };
 
   log(`Fetching page: ${url}`);

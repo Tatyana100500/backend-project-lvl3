@@ -49,7 +49,7 @@ const getLocalAssetsList = (html) => {
   logAssets('found assets: %O', allAssets);
 
   const localAssets = allAssets
-    .filter(item => isLinkLocal(item) || item === 'https://site.com/assets/scripts.js');
+    .filter(item => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
   

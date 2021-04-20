@@ -125,7 +125,7 @@ const loadPage = (source, outputDirectory) => {
         const edd = hostname.replace(/[\W_]+/g, '-');
         const newHtmlRegExp = ctx.assetsLinks
           .map((oldValue) => {
-            const newValue = `${assetsDirName}/${edd}${getFileName(oldValue)}`;
+            const newValue = `${assetsDirName}/${edd}-${getFileName(oldValue)}`;
             return {
               oldValue,
               newValue,

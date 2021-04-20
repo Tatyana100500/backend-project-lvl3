@@ -26,7 +26,7 @@ const isLinkLocal = (link) => {
 const getFileName = (source) => {
   const { pathname } = url.parse(source);
   const extention = pathname.match(/\.\w+$/) === null ? '' : pathname.match(/\.\w+$/)[0];
-
+  log('!!!!!!!!!!!!!!', extention);
   return pathname
     .replace(/^\//, '')
     .replace(extention, '')
@@ -80,7 +80,7 @@ const loadPage = (source, outputDirectory) => {
 
   const assetsDirName = outputHtmlName.replace(/\.html$/, '_files');
   const assetsDirPath = path.join(outputDirectory, assetsDirName);
-  log('!!!!!!!!!!!!!!', outputHtmlName, outputHtmlPath, assetsDirName, assetsDirPath);
+  
   log('new page loading');
   log('source: %s', source);
   log('html file name: %s', outputHtmlName);

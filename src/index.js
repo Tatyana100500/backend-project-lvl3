@@ -20,7 +20,7 @@ const assetsAttrs = {
 
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
-  
+  log('!!!!!!!!!!!', hostname);
   return hostname === null;
 
 };
@@ -48,12 +48,12 @@ const getLocalAssetsList = (html) => {
     log('!!!!!!!!!!!', allAssets);
   logAssets('found assets: %O', allAssets);
 
-  //const localAssets = allAssets
-    //.filter(item => isLinkLocal(item));
+  const localAssets = allAssets
+    .filter(item => isLinkLocal(item));
 
-  //logAssets('local assets: %O', localAssets);
-  //log('!!!!!!!!!!!', localAssets);
-  return allAssets;
+  logAssets('local assets: %O', localAssets);
+  
+  return localAssets;
 };
 
 const loadAsset = (source, outputFilePath) => axios

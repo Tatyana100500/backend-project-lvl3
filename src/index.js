@@ -48,12 +48,12 @@ const getLocalAssetsList = (html) => {
     log('!!!!!!!!!!!', allAssets);
   logAssets('found assets: %O', allAssets);
 
-  const localAssets = allAssets
-    .filter(item => isLinkLocal(item));
+  //const localAssets = allAssets
+    //.filter(item => isLinkLocal(item));
 
-  logAssets('local assets: %O', localAssets);
-  log('!!!!!!!!!!!', localAssets);
-  return localAssets;
+  //logAssets('local assets: %O', localAssets);
+  //log('!!!!!!!!!!!', localAssets);
+  return allAssets;
 };
 
 const loadAsset = (source, outputFilePath) => axios

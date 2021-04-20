@@ -21,7 +21,7 @@ const assetsAttrs = {
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
   log('!!!!!!!!!!!', hostname);
-  return hostname === null;
+  return hostname === null || hostname === 'site.com';
 
 };
 

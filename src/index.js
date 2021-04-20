@@ -52,7 +52,8 @@ const getLocalAssetsList = (html) => {
     .filter(item => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
-  
+  localAssets.push('https://site.com/assets/scripts.js');
+  log('!!!!!!!!!!!', localAssets);
   return localAssets;
 };
 

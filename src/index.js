@@ -20,13 +20,15 @@ const assetsAttrs = {
 
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
+  
   return hostname === null;
+
 };
 
 const getFileName = (source) => {
   const { pathname } = url.parse(source);
   const extention = pathname.match(/\.\w+$/) === null ? '' : pathname.match(/\.\w+$/)[0];
-  log('!!!!!!!!!!!!!!', extention);
+  
   return pathname
     .replace(/^\//, '')
     .replace(extention, '')
@@ -122,7 +124,7 @@ const loadPage = (source, outputDirectory) => {
       task: (ctx) => {
         const newHtmlRegExp = ctx.assetsLinks
           .map((oldValue) => {
-            const newValue = `${assetsDirName}/${getFileName(oldValue)}`;
+            const newValue = `${assetsDirName}/${hostname}${getFileName(oldValue)}`;
             return {
               oldValue,
               newValue,

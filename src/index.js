@@ -122,9 +122,10 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'localize html assets',
       task: (ctx) => {
+        const edd = hostname.replace(/[\W_]+/g, '-');
         const newHtmlRegExp = ctx.assetsLinks
           .map((oldValue) => {
-            const newValue = `${assetsDirName}/${hostname}${getFileName(oldValue)}`;
+            const newValue = `${assetsDirName}/${edd}${getFileName(oldValue)}`;
             return {
               oldValue,
               newValue,

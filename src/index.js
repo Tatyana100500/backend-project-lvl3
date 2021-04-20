@@ -52,7 +52,7 @@ const getLocalAssetsList = (html) => {
     .filter(item => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
-  
+  log('!!!!!!!!!!!', localAssets);
   return localAssets;
 };
 

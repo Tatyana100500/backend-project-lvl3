@@ -49,7 +49,7 @@ const getLocalAssetsList = (html) => {
   logAssets('found assets: %O', allAssets);
 
   const localAssets = allAssets
-    //.filter(item => isLinkLocal(item));
+    .filter(item => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
   
@@ -70,7 +70,7 @@ const loadAsset = (source, outputFilePath) => axios
 
 const loadPage = (source, outputDirectory) => {
   const { hostname, pathname } = url.parse(source);
-  
+  log('!!!!!!!!!!!', source);
   const preName = pathname === '/' ? hostname : `${hostname}-${pathname}`;
   
   const outputHtmlName = preName

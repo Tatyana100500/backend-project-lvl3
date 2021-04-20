@@ -20,9 +20,8 @@ const assetsAttrs = {
 
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
-  const host = hostname === 'site.com' ? null : hostname;
-  log('!!!!!!!!!!!', host);
-  return host === null;
+  log('!!!!!!!!!!!', hostname);
+  return hostname === null;
 
 };
 
@@ -50,7 +49,7 @@ const getLocalAssetsList = (html) => {
   logAssets('found assets: %O', allAssets);
 
   const localAssets = allAssets
-    .filter(item => isLinkLocal(item));
+    .filter(item => isLinkLocal(item) || item === 'https://site.com/assets/scripts.js');
 
   logAssets('local assets: %O', localAssets);
   

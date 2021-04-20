@@ -130,6 +130,7 @@ const loadPage = (source, outputDirectory) => {
 
         ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
           const { oldValue, newValue } = currentValue;
+          log('???????????????', oldValue, newValue);
           return acc.replace(oldValue, newValue);
         }, ctx.data);
       },

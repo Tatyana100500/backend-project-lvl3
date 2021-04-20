@@ -45,7 +45,7 @@ const getLocalAssetsList = (html) => {
   const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
     .get()));
-
+    log('!!!!!!!!!!!', allAssets);
   logAssets('found assets: %O', allAssets);
 
   const localAssets = allAssets
@@ -70,7 +70,7 @@ const loadAsset = (source, outputFilePath) => axios
 
 const loadPage = (source, outputDirectory) => {
   const { hostname, pathname } = url.parse(source);
-  log('!!!!!!!!!!!', source);
+  
   const preName = pathname === '/' ? hostname : `${hostname}-${pathname}`;
   
   const outputHtmlName = preName

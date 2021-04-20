@@ -68,7 +68,7 @@ const loadAsset = (source, outputFilePath) => axios
 
 const loadPage = (source, outputDirectory) => {
   const { hostname, pathname } = url.parse(source);
-  log('!!!!!!!!!!!!!!', source, outputDirectory, hostname, pathname);
+  
   const preName = pathname === '/' ? hostname : `${hostname}-${pathname}`;
   
   const outputHtmlName = preName
@@ -80,7 +80,7 @@ const loadPage = (source, outputDirectory) => {
 
   const assetsDirName = outputHtmlName.replace(/\.html$/, '_files');
   const assetsDirPath = path.join(outputDirectory, assetsDirName);
-
+  log('!!!!!!!!!!!!!!', outputHtmlName, outputHtmlPath, assetsDirName, assetsDirPath);
   log('new page loading');
   log('source: %s', source);
   log('html file name: %s', outputHtmlName);

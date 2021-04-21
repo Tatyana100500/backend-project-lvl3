@@ -20,22 +20,23 @@ const assetsAttrs = {
 
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
-  
+  log('!!!!!!!!!!!', hostname);
+  const ext = hostname === 'site.com' ? null : hostname;
+  log('!!!!!!!!!!!', ext);
   return hostname === null;
 
 };
 
 const getFileName = (source) => {
   const { pathname } = url.parse(source);
-  log('!!!!!!!!!!!', pathname);
   const extention = pathname.match(/\.\w+$/) === null ? '' : pathname.match(/\.\w+$/)[0];
-  const ext = extention === 'site.com' ? '' : extention;
+  
   
   return pathname
     .replace(/^\//, '')
-    .replace(ext, '')
+    .replace(extention, '')
     .replace(/[\W_]+/g, '-')
-    .concat(ext);
+    .concat(extention);
 };
 
 const getLocalAssetsList = (html) => {

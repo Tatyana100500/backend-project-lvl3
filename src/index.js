@@ -136,7 +136,7 @@ const loadPage = (source, outputDirectory) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
           const newValues = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
-          //log('???????????????', oldValue, newValue);
+
           return acc.replace(oldValue, newValues);
         }, ctx.data);
       },
@@ -183,7 +183,7 @@ const loadPage = (source, outputDirectory) => {
             title: `Loading asset from ${assetUrl} to ${outputFilePath}`,
             task: () => loadAsset(assetUrl, outputFilePath),
           }));
-
+        log('???????????????', assetUrl, outputFilePath);
         logAssets('saving assets to disk');
         return new Listr(assetsTasks, {
           concurrent: true, exitOnError: false,

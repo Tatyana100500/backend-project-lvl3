@@ -23,7 +23,7 @@ const isLinkLocal = (link) => {
   log('!!!!!!!!!!!', hostname);
   const ext = hostname === 'site.com' ? null : hostname;
   log('!!!!!!!!!!!', ext);
-  return hostname === null;
+  return ext === null;
 
 };
 

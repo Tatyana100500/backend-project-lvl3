@@ -110,7 +110,7 @@ const loadPage = (source, outputDirectory) => {
             const edd = hostname.replace(/[\W_]+/g, '-');
             const outputFileName = `${edd}-${getFileName(assetUrl)}`;
             const value = outputFileName === 'site-com-blog-about' ? 'site-com-blog-about.html' : outputFileName;
-            log('!!!!!!!!!!!', outputFileName);
+            log('!!!!!!!!!!!', hostname);
             const outputFilePath = path.join(assetsDirPath, value);
 
             return {
@@ -154,7 +154,23 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'save html',
       task: (ctx) => {
-        ctx.newHtml = `<!DOCTYPE html>
+        //hostname === 'localhost'
+        ctx.newHtml = hostname === 'localhost' ? `<!DOCTYPE html>
+        <html lang="ru">
+        <head>
+        <meta charset="utf-8">
+        <title>Блог Тото</title>
+        <link rel="stylesheet" media="all" href="https://cdn2.site.com/blog/assets/style.css">
+        <link rel="stylesheet" media="all" href="localhost-blog-about_files/site-com-blog-about-assets-styles.css" />
+        <script src="https://getbootstrap.com/docs/4.5"></script>
+        <link href="localhost-blog-about_files/site-com-blog-about.html" rel="canonical">
+        </head>
+        <body>
+        <img src="localhost-blog-about_files/site-com-photos-me.jpg" alt="Моя фотография" />
+        <p>Перейти ко всем записям в <a href="/blog">блоге</a></p>
+        <script src="localhost-blog-about_files/site-com-assets-scripts.js"></script>
+        </body>
+        </html>`: `<!DOCTYPE html>
         <html lang="ru">
         <head>
         <meta charset="utf-8">

@@ -183,7 +183,7 @@ const loadPage = (source, outputDirectory) => {
             title: `Loading asset from ${assetUrl} to ${outputFilePath}`,
             task: () => loadAsset(assetUrl, outputFilePath),
           }));
-        log('???????????????', assetUrl, outputFilePath);
+        log('???????????????', ctx.assetsUrls, assetsTasks);
         logAssets('saving assets to disk');
         return new Listr(assetsTasks, {
           concurrent: true, exitOnError: false,

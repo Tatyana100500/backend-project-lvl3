@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import url from 'url';
 import cheerio from 'cheerio';
 import debug from 'debug';
-import _ from 'lodash/fp';
+import _ from 'lodash/fp.js';
 import Listr from 'listr';
 
 const log = debug('page-loader');

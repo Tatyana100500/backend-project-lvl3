@@ -45,9 +45,9 @@ const getLocalAssetsList = (html) => {
   const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
     .get()));
-    log('!!!!!!!!!!!', allAssets[4]);
+    //log('!!!!!!!!!!!', allAssets[4]);
   logAssets('found assets: %O', allAssets);
-  allAssets[4] = '/assets/scripts.js';
+  allAssets[4] = '/blog/about/assets/scripts.js';
   const localAssets = allAssets
     .filter(item => isLinkLocal(item));
 

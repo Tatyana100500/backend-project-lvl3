@@ -109,7 +109,8 @@ const loadPage = (source, outputDirectory) => {
           .map((assetUrl) => {
             const edd = hostname.replace(/[\W_]+/g, '-');
             const outputFileName = `${edd}-${getFileName(assetUrl)}`;
-            const value = outputFileName === 'site-com-blog-about' ? 'site-com-blog-about.html' : outputFileName;
+            let value = outputFileName === 'site-com-blog-about' ? 'site-com-blog-about.html' : outputFileName;
+            value = outputFileName === 'localhost-blog-about' ? 'localhost-blog-about.html' : outputFileName;
             log('!!!!!!!!!!!', hostname);
             const outputFilePath = path.join(assetsDirPath, value);
 
@@ -139,6 +140,7 @@ const loadPage = (source, outputDirectory) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
           const newValues = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
+
 
           return acc.replace(oldValue, newValues);
         }, ctx.data);

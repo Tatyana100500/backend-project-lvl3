@@ -1,4 +1,4 @@
-import 'source-map-support/register';
+import 'source-map-support/register.js';
 import axios from 'axios';
 import path from 'path';
 import { promises as fs } from 'fs';

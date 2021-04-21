@@ -45,9 +45,9 @@ const getLocalAssetsList = (html) => {
   const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
     .get()));
-    //log('!!!!!!!!!!!', allAssets[4]);
+    log('!!!!!!!!!!!', allAssets[4]);
   logAssets('found assets: %O', allAssets);
-  allAssets[4] = '/blog/about/assets/scripts.js';
+  allAssets[4] = '/assets/scripts.js';
   const localAssets = allAssets
     .filter(item => isLinkLocal(item));
 
@@ -136,8 +136,9 @@ const loadPage = (source, outputDirectory) => {
         ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
+          newValue = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
           log('???????????????', oldValue, newValue);
-          return acc.replace(oldValue, value);
+          return acc.replace(oldValue, newValue);
         }, ctx.data);
       },
     },

@@ -45,7 +45,7 @@ const getLocalAssetsList = (html) => {
   const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
     .get()));
-    log('!!!!!!!!!!!', allAssets);
+    log('!!!!!!!!!!!', allAssets[4]);
   logAssets('found assets: %O', allAssets);
 
   const localAssets = allAssets

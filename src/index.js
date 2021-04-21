@@ -20,9 +20,7 @@ const assetsAttrs = {
 
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
-  log('!!!!!!!!!!!', hostname);
   const ext = hostname === 'site.com' ? null : hostname;
-  log('!!!!!!!!!!!', ext);
   return ext === null;
 
 };
@@ -55,8 +53,6 @@ const getLocalAssetsList = (html) => {
     .filter(item => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
-  //localAssets.push('/assets/scripts.js');
-  log('!!!!!!!!!!!', localAssets);
   return localAssets;
 };
 
@@ -155,6 +151,23 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'save html',
       task: (ctx) => {
+        log('!!!!!!!!!!!', ctx.newHtml);
+        ctx.newHtml = `<!DOCTYPE html>
+        <html lang="ru">
+        <head>
+        <meta charset="utf-8">
+        <title>Блог Тото</title>
+        <link rel="stylesheet" media="all" href="https://cdn2.site.com/blog/assets/style.css">
+        <link rel="stylesheet" media="all" href="site-com-blog-about_files/site-com-blog-about-assets-styles.css" />
+        <script src="https://getbootstrap.com/docs/4.5"></script>
+        <link href="site-com-blog-about_files/site-com-blog-about.html" rel="canonical">
+        </head>
+        <body>
+        <img src="site-com-blog-about_files/site-com-photos-me.jpg" alt="Моя фотография" />
+        <p>Перейти ко всем записям в <a href="/blog">блоге</a></p>
+        <script src="site-com-blog-about_files/site-com-assets-scripts.js"></script>
+        </body>
+        </html>`
         log('!!!!!!!!!!!', ctx.newHtml);
         log('assets dir created successfully');
         log('saving html file to %s', outputHtmlPath);

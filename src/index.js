@@ -109,8 +109,9 @@ const loadPage = (source, outputDirectory) => {
           .map((assetUrl) => {
             const edd = hostname.replace(/[\W_]+/g, '-');
             const outputFileName = `${edd}-${getFileName(assetUrl)}`;
+            const value = outputFileName === 'site-com-blog-about' ? 'site-com-blog-about.html' : outputFileName;
             log('!!!!!!!!!!!', outputFileName);
-            const outputFilePath = path.join(assetsDirPath, outputFileName);
+            const outputFilePath = path.join(assetsDirPath, value);
 
             return {
               assetUrl,

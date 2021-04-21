@@ -20,7 +20,7 @@ const assetsAttrs = {
 
 const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
-  log('!!!!!!!!!!!', hostname);
+  
   return hostname === null;
 
 };
@@ -132,7 +132,7 @@ const loadPage = (source, outputDirectory) => {
               newValue,
             };
           });
-
+          log('!!!!!!!!!!!', ctx.data);
         ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;

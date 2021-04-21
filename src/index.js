@@ -107,7 +107,8 @@ const loadPage = (source, outputDirectory) => {
         ctx.assetsUrls = ctx.assetsLinks
           .map(assetLink => url.resolve(source, assetLink))
           .map((assetUrl) => {
-            const outputFileName = getFileName(assetUrl);
+            const edd = hostname.replace(/[\W_]+/g, '-');
+            const outputFileName = `${edd}-${getFileName(assetUrl)}`;
             log('!!!!!!!!!!!', outputFileName);
             const outputFilePath = path.join(assetsDirPath, outputFileName);
 

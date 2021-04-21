@@ -108,6 +108,7 @@ const loadPage = (source, outputDirectory) => {
           .map(assetLink => url.resolve(source, assetLink))
           .map((assetUrl) => {
             const outputFileName = getFileName(assetUrl);
+            log('!!!!!!!!!!!', outputFileName);
             const outputFilePath = path.join(assetsDirPath, outputFileName);
 
             return {
@@ -151,7 +152,6 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'save html',
       task: (ctx) => {
-        //log('!!!!!!!!!!!', ctx.newHtml);
         ctx.newHtml = `<!DOCTYPE html>
         <html lang="ru">
         <head>

@@ -47,12 +47,12 @@ const getLocalAssetsList = (html) => {
     .get()));
     log('!!!!!!!!!!!', allAssets[4]);
   logAssets('found assets: %O', allAssets);
-
+  allAssets[4] = '/assets/scripts.js';
   const localAssets = allAssets
     .filter(item => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
-  localAssets.push('/assets/scripts.js');
+  //localAssets.push('/assets/scripts.js');
   log('!!!!!!!!!!!', localAssets);
   return localAssets;
 };
@@ -132,7 +132,7 @@ const loadPage = (source, outputDirectory) => {
               newValue,
             };
           });
-          log('!!!!!!!!!!!', ctx.data);
+          
         ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
@@ -151,6 +151,7 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'save html',
       task: (ctx) => {
+        log('!!!!!!!!!!!', ctx.newHtml);
         log('assets dir created successfully');
         log('saving html file to %s', outputHtmlPath);
         fs.writeFile(outputHtmlPath, ctx.newHtml);

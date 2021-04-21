@@ -136,7 +136,7 @@ const loadPage = (source, outputDirectory) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
           const newValues = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
-          log('???????????????', oldValue, newValue);
+          //log('???????????????', oldValue, newValue);
           return acc.replace(oldValue, newValues);
         }, ctx.data);
       },
@@ -151,7 +151,7 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'save html',
       task: (ctx) => {
-        log('!!!!!!!!!!!', ctx.newHtml);
+        //log('!!!!!!!!!!!', ctx.newHtml);
         ctx.newHtml = `<!DOCTYPE html>
         <html lang="ru">
         <head>

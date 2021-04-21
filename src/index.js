@@ -136,9 +136,9 @@ const loadPage = (source, outputDirectory) => {
         ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
-          newValue = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
+          const newValues = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
           log('???????????????', oldValue, newValue);
-          return acc.replace(oldValue, newValue);
+          return acc.replace(oldValue, newValues);
         }, ctx.data);
       },
     },

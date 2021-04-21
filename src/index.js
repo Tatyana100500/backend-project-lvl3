@@ -27,13 +27,15 @@ const isLinkLocal = (link) => {
 
 const getFileName = (source) => {
   const { pathname } = url.parse(source);
+  log('!!!!!!!!!!!', pathname);
   const extention = pathname.match(/\.\w+$/) === null ? '' : pathname.match(/\.\w+$/)[0];
+  const ext = extention === 'site.com' ? '' : extention;
   
   return pathname
     .replace(/^\//, '')
-    .replace(extention, '')
+    .replace(ext, '')
     .replace(/[\W_]+/g, '-')
-    .concat(extention);
+    .concat(ext);
 };
 
 const getLocalAssetsList = (html) => {
@@ -45,7 +47,7 @@ const getLocalAssetsList = (html) => {
   const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
     .get()));
-    log('!!!!!!!!!!!', allAssets[4]);
+    
   logAssets('found assets: %O', allAssets);
   allAssets[4] = '/assets/scripts.js';
   const localAssets = allAssets

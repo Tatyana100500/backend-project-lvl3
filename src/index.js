@@ -22,14 +22,11 @@ const isLinkLocal = (link) => {
   const { hostname } = url.parse(link);
   const ext = hostname === 'site.com' ? null : hostname;
   return ext === null;
-
 };
 
 const getFileName = (source) => {
   const { pathname } = url.parse(source);
   const extention = pathname.match(/\.\w+$/) === null ? '' : pathname.match(/\.\w+$/)[0];
-  
-  
   return pathname
     .replace(/^\//, '')
     .replace(extention, '')

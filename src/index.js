@@ -40,10 +40,9 @@ const getLocalAssetsList = (html) => {
   const requiredAssets = ['link', 'script', 'img'];
   const $ = cheerio.load(html);
 
-  const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
+  const allAssets = _.flatten(requiredAssets.map(asset => {$(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
-    .get()));
-    
+    .get()}));
   logAssets('found assets: %O', allAssets);
   allAssets[4] = '/assets/scripts.js';
   const localAssets = allAssets
@@ -67,9 +66,7 @@ const loadAsset = (source, outputFilePath) => axios
 
 const loadPage = (source, outputDirectory) => {
   const { hostname, pathname } = url.parse(source);
-  
   const preName = pathname === '/' ? hostname : `${hostname}-${pathname}`;
-  
   const outputHtmlName = preName
     .replace(/^\//, '')
     .replace(/[\W_]+/g, '-')
@@ -79,7 +76,6 @@ const loadPage = (source, outputDirectory) => {
 
   const assetsDirName = outputHtmlName.replace(/\.html$/, '_files');
   const assetsDirPath = path.join(outputDirectory, assetsDirName);
-  
   log('new page loading');
   log('source: %s', source);
   log('html file name: %s', outputHtmlName);

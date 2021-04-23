@@ -8,5 +8,5 @@ parserOptions:
   sourceType: module
 ignorePatterns: ["test.js"]
 rules: {
-  import/no-extraneous-dependencies: [error, { devDependencies: true }]
+  "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
 }

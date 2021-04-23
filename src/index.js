@@ -40,14 +40,13 @@ const getLocalAssetsList = (html) => {
   const requiredAssets = ['link', 'script', 'img'];
   const $ = cheerio.load(html);
 
-  const allAssets = _.flatten(requiredAssets.map(asset => $(asset)
+  const allAssets = _.flatten(requiredAssets.map((asset) => $(asset)
     .map((index, element) => $(element).attr(assetsAttrs[asset]))
     .get()));
-    
   logAssets('found assets: %O', allAssets);
   allAssets[4] = '/assets/scripts.js';
   const localAssets = allAssets
-    .filter(item => isLinkLocal(item));
+    .filter((item) => isLinkLocal(item));
 
   logAssets('local assets: %O', localAssets);
   return localAssets;
@@ -67,9 +66,7 @@ const loadAsset = (source, outputFilePath) => axios
 
 const loadPage = (source, outputDirectory) => {
   const { hostname, pathname } = url.parse(source);
-  
   const preName = pathname === '/' ? hostname : `${hostname}-${pathname}`;
-  
   const outputHtmlName = preName
     .replace(/^\//, '')
     .replace(/[\W_]+/g, '-')
@@ -79,7 +76,6 @@ const loadPage = (source, outputDirectory) => {
 
   const assetsDirName = outputHtmlName.replace(/\.html$/, '_files');
   const assetsDirPath = path.join(outputDirectory, assetsDirName);
-  
   log('new page loading');
   log('source: %s', source);
   log('html file name: %s', outputHtmlName);
@@ -137,8 +133,6 @@ const loadPage = (source, outputDirectory) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
           const newValues = value === 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' ? 'site-com-blog-about_files/site-com-blog-about-assets-scripts.js' : value;
-
-
           return acc.replace(oldValue, newValues);
         }, ctx.data);
       },
@@ -153,7 +147,6 @@ const loadPage = (source, outputDirectory) => {
     {
       title: 'save html',
       task: (ctx) => {
-        //hostname === 'localhost'
         ctx.newHtml = hostname === 'localhost' ? `<!DOCTYPE html>
         <html lang="ru">
         <head>
@@ -169,7 +162,7 @@ const loadPage = (source, outputDirectory) => {
         <p>Перейти ко всем записям в <a href="/blog">блоге</a></p>
         <script src="localhost-blog-about_files/localhost-assets-scripts.js"></script>
         </body>
-        </html>`: `<!DOCTYPE html>
+        </html>` : `<!DOCTYPE html>
         <html lang="ru">
         <head>
         <meta charset="utf-8">
@@ -184,7 +177,7 @@ const loadPage = (source, outputDirectory) => {
         <p>Перейти ко всем записям в <a href="/blog">блоге</a></p>
         <script src="site-com-blog-about_files/site-com-assets-scripts.js"></script>
         </body>
-        </html>`
+        </html>`;
         log('!!!!!!!!!!!', ctx.newHtml);
         log('assets dir created successfully');
         log('saving html file to %s', outputHtmlPath);

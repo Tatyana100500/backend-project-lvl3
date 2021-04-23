@@ -84,7 +84,7 @@ const loadPage = (source, outputDirectory) => {
   const loadPageTasks = new Listr([
     {
       title: 'Download source page',
-      task: ctx => axios
+      task: (ctx) => axios
         .get(source)
         .then(({ status, data }) => {
           log('loading page html');
@@ -98,7 +98,7 @@ const loadPage = (source, outputDirectory) => {
         ctx.assetsLinks = getLocalAssetsList(ctx.data);
 
         ctx.assetsUrls = ctx.assetsLinks
-          .map(assetLink => url.resolve(source, assetLink))
+          .map((assetLink) => url.resolve(source, assetLink))
           .map((assetUrl) => {
             const edd = hostname.replace(/[\W_]+/g, '-');
             const outputFileName = `${edd}-${getFileName(assetUrl)}`;
@@ -128,7 +128,6 @@ const loadPage = (source, outputDirectory) => {
               newValue,
             };
           });
-          
         ctx.newHtml = newHtmlRegExp.reduce((acc, currentValue) => {
           const { oldValue, newValue } = currentValue;
           const value = newValue === 'site-com-blog-about_files/site-com-blog-about' ? 'site-com-blog-about_files/site-com-blog-about.html' : newValue;
